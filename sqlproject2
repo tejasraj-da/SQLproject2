@@ -1,0 +1,93 @@
+
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) UNIQUE,
+    Salary DECIMAL(10, 2) DEFAULT 50000.00,
+    DepartmentID INT,
+    HireDate DATE,
+    FOREIGN KEY (DepartmentID) 
+        REFERENCES Departments(DepartmentID) 
+        ON DELETE CASCADE
+);
+
+INSERT INTO Departments (DepartmentID, DepartmentName) VALUES
+(1, 'Engineering'),
+(2, 'Marketing'),
+(3, 'Sales'),
+(4, 'Human Resources');
+
+INSERT INTO Employees (EmployeeID, FirstName, LastName, Email, Salary, DepartmentID, HireDate)
+VALUES (101, 'Jane', 'Doe', 'jane.doe@elevate.com', 90000.00, 1, '2023-05-15');
+
+INSERT INTO Employees (EmployeeID, FirstName, LastName, DepartmentID)
+VALUES (102, 'John', 'Smith', 2);
+
+INSERT INTO Employees (EmployeeID, FirstName, LastName, Email, DepartmentID, HireDate)
+VALUES (103, 'Alice', 'Johnson', 'alice.j@elevate.com', 1, '2024-01-10');
+
+INSERT INTO Employees (EmployeeID, FirstName, LastName, Email, Salary, DepartmentID, HireDate)
+VALUES (104, 'Bob', 'Brown', 'bob.b@elevate.com', NULL, 3, '2023-11-30');
+
+INSERT INTO Employees (EmployeeID, FirstName, LastName, Email, DepartmentID) VALUES
+(105, 'Charlie', 'Davis', 'charlie.d@elevate.com', 2),
+(106, 'Diana', 'Evans', 'diana.e@elevate.com', 4);
+
+CREATE TABLE Employee_Backup (
+    EmployeeID INT,
+    FullName VARCHAR(100),
+    DepartmentName VARCHAR(100)
+);
+
+INSERT INTO Employee_Backup (EmployeeID, FullName, DepartmentName)
+SELECT 
+    e.EmployeeID, 
+    e.FirstName || ' ' || e.LastName, 
+    d.DepartmentName
+FROM 
+    Employees e
+JOIN 
+    Departments d ON e.DepartmentID = d.DepartmentID
+WHERE 
+    e.HireDate >= '2024-01-01';
+
+UPDATE Employees
+SET 
+    Email = 'john.smith@elevate.com',
+    Salary = 78000.00
+WHERE 
+    EmployeeID = 102;
+
+UPDATE Employees
+SET 
+    Salary = Salary * 1.05
+WHERE 
+    DepartmentID = 1;
+
+UPDATE Employees
+SET 
+    HireDate = '2024-03-01'
+WHERE 
+    HireDate IS NULL
+    AND DepartmentID = 4;
+
+DELETE FROM Employees
+WHERE 
+    EmployeeID = 105;
+
+DELETE FROM Departments
+WHERE 
+    DepartmentName = 'Sales';
+
+BEGIN TRANSACTION;
+
+DELETE FROM Employees
+WHERE DepartmentID = 1;
+
+ROLLBACK;
