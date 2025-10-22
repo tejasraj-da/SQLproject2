@@ -1,1 +1,2 @@
 # SQLproject2
+This repo holds my SQL script for Task 2 of the Elevate Labs internship. My main goal here was to practice the core DML commands: INSERT, UPDATE, and DELETE. I wrote several INSERT statements to populate the tables, making sure to handle NULL values correctly. I also practiced modifying data with UPDATE and removing specific rows using DELETE with WHERE conditions. This project helped me get comfortable with manipulating data and keeping it clean and consistent.
